@@ -261,7 +261,7 @@ def voice():
     caller_info = request.args.get('caller')
     question = request.args.get('question')
     response = twiml.Response()
-    language="es"
+    language="en"
 
     action = "/gather?caller={}&question={}".format(caller_info, question)
     question_info = get_questions()
@@ -269,9 +269,9 @@ def voice():
         # gather.play("http://ethiopia-sms.herokuapp.com/static/testsound.m4a")
         option = "Welcome. Did it rain yesterday? If yes, press 1. If no, press 2."
         question = question_info.get('init', option)
-        response.pause(length=1)
+        gather.pause(length=5)
 
-        gather.say(question, language=language, loop=0)
+        gather.say(question, language=language, loop=2)
 
     return str(response)
 
@@ -280,7 +280,7 @@ def gather():
     caller_info = request.args.get('caller')
     question = request.args.get('question')
     digits = request.form['Digits'] #These are the inputted numbers
-    language="es"
+    language="en"
     response = twiml.Response()
 
     add_call_to_db(caller_info, None, question_info.get(question), digits, True)
@@ -292,7 +292,7 @@ def gather():
           question = question_info.get('1', option)
 
           # add_call_to_db(caller_info, None, question, int(digits), True)
-          gather.say(question, language=language, loop=0)
+          gather.say(question, language=language, loop=1)
 
     elif digits == "2":
         action = "/gather?caller={}&question=2".format(caller_info)
