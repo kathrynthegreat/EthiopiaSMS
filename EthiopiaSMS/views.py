@@ -23,17 +23,17 @@ ethiopia_info = {
 def write_questions(questions):
 
   q_info = questions
-  if questions['init']:
-    update_question(q_info['init'], 1,"es")
+  if questions['1']:
+    update_question(q_info['1'], 1,"es")
 
   if questions['1']:
-    update_question(q_info['1'], 2,"es")
+    update_question(q_info['2'], 2,"es")
 
   if questions['2']:
-    update_question(q_info['2'], 3,"es")
+    update_question(q_info['3'], 3,"es")
 
   if questions['3']:
-     update_question(q_info['3'], 4,"es")
+     update_question(q_info['4'], 4,"es")
 
 
 
@@ -330,10 +330,10 @@ def add_msg():
 
   if request.method == "POST":
     q_info = {}
-    q_info['init'] = request.form.get('q1')
-    q_info['1'] = request.form.get('q2')
-    q_info['2'] = request.form.get('q3')
-    q_info['3'] = request.form.get('q4')
+    q_info['1'] = request.form.get('q1')
+    q_info['2'] = request.form.get('q2')
+    q_info['3'] = request.form.get('q3')
+    q_info['4'] = request.form.get('q4')
 
     write_questions(q_info)
 
