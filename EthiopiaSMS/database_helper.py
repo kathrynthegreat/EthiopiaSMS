@@ -141,9 +141,7 @@ def load_questions():
             new_dict = {}
 
             for r in result:
-              new_dict[str(r['id'])] = str(r['content'])
-
-            print new_dict
+              new_dict[str(r['id'])] = str(r['content']).decode("utf-8")
 
             return new_dict
 
