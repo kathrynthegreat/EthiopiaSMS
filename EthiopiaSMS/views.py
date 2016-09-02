@@ -282,11 +282,11 @@ def voice():
     question_info = get_questions()
     with response.gather(numDigits=1, action=action) as gather:
         # gather.play("http://ethiopia-sms.herokuapp.com/static/testsound.m4a")
-        option = "Welcome. Did it rain yesterday? If yes, press 1. If no, press 2."
-        question = question_info.get('init', option)
+        option = "Error"
+        question = question_info.get('1', option)
         gather.pause(length=5)
 
-        gather.say(question, language=language, loop=2)
+        gather.say(question, language=language, loop=3)
 
     return str(response)
 
@@ -303,8 +303,8 @@ def gather():
     if digits == "1":
         action = "/gather?caller={}&question=1".format(caller_info)
         with response.gather(numDigits=1, action=action) as gather:
-          option = "Thank you for telling us it rained. Has it rained for more than 3 days? Press 3 if it has, Press 0 if it has not."
-          question = question_info.get('1', option)
+          option = "Error"
+          question = question_info.get('2', option)
 
           # add_call_to_db(caller_info, None, question, int(digits), True)
           gather.say(question, language=language, loop=1)
@@ -312,14 +312,14 @@ def gather():
     elif digits == "2":
         action = "/gather?caller={}&question=2".format(caller_info)
         with response.gather(numDigits=1, action=action) as gather:
-          option = "Thank you for telling us it did not rain."
-          question = question_info.get('2', option)
+          option = "Error"
+          question = question_info.get('3', option)
           # add_call_to_db(caller_info, None, question, int(digits), True)
           response.say(question, language=language, loop=1)
 
     else:
-        option = "Thank you for telling us it did rain. Goodbye."
-        question = question_info.get('3', option)
+        option = "Error"
+        question = question_info.get('4', option)
 
         add_call_to_db(caller_info, None, question, None, True)
         response.say(option, language=language, loop=1)
