@@ -280,11 +280,12 @@ def voice():
 
     action = "/gather?caller={}&question={}".format(caller_info, question)
     question_info = get_questions()
+
     with response.gather(numDigits=1, action=action) as gather:
         # gather.play("http://ethiopia-sms.herokuapp.com/static/testsound.m4a")
         option = "Error"
         question = question_info.get('1', option)
-        gather.pause(length=5)
+        gather.pause(length=1)
 
         gather.say(question, language=language, loop=3)
 
@@ -297,6 +298,8 @@ def gather():
     digits = request.form['Digits'] #These are the inputted numbers
     language="es"
     response = twiml.Response()
+    print "Current questions: "
+    print question_info
 
     add_call_to_db(caller_info, None, question_info.get(question), digits, True)
 
