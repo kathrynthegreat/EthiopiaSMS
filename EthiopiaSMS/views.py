@@ -15,33 +15,32 @@ import io
 user_list = None
 call_list = None
 ethiopia_info = {
-    "regions": ["Afar", "Amhara"],
+    "regions": ["Santo Domingo", "Puerto Plata"],
     "villages": [],
     "message": ""
 }
 
 def write_questions(questions):
-  with open(os.path.join(APP_STATIC,'questions.json')) as f:
-    q_data = json.load(f)
+
+  q_info = questions
   if questions['init']:
-    q_data['init'] = questions['init']
+    update_question(q_info['init'], 1,"es")
 
   if questions['1']:
-    q_data['1'] = questions['1']
+    update_question(q_info['1'], 2,"es")
 
   if questions['2']:
-    q_data['2'] = questions['2']
+    update_question(q_info['2'], 3,"es")
 
   if questions['3']:
-    q_data['3'] = questions['3']
+     update_question(q_info['3'], 4,"es")
 
-  with io.open(os.path.join(APP_STATIC,'questions.json'), 'w', encoding='utf8') as f:
-    f.write(json.dumps(q_data, ensure_ascii=False))
 
 
 def get_questions():
-  with open(os.path.join(APP_STATIC,'questions.json')) as f:
-    q_data = json.load(f)
+  q_data = load_questions()
+  # with open(os.path.join(APP_STATIC,'questions.json')) as f:
+  #   q_data = json.load(f)
 
   return q_data
 
@@ -116,34 +115,50 @@ def users():
         # For adding a new person into our database
         ####################
         cell_phone = request.form.get("cell_phone", None)
+        cell_phone_list = []
         name = request.form.get("name", None)
         input_region = request.form.get("regions", None)
         input_village = request.form.get("villages", None)
 
-        user_entry = {
-            "name": name,
-            "cell_phone": cell_phone,
-            "region": input_region,
-            "village": input_village
-        }
+        if "," in cell_phone:
+          cell_phone_list = cell_phone.split(",")
 
-        # only add if passed checking
-        if check_user(user_entry):
-            # add region number to phone number
-            if user_entry["region"] == "United States":
-                if not user_entry["cell_phone"].startswith("1"):
-                    user_entry["cell_phone"] = "1" + str(user_entry["cell_phone"])
-            elif user_entry["region"] == "Ethiopia":
-                if not user_entry["cell_phone"].startswith("251"):
-                    user_entry["cell_phone"] = "251" + str(user_entry["cell_phone"])
-            else:
-                print("Not supported")
-
-            # add user to db
+          for n in cell_phone_list:
+            user_entry = {
+              "name": name,
+              "cell_phone": n,
+              "region": input_region,
+              "village": input_village
+            }
             add_user(user_entry)
+
         else:
-            # did not fill all required fields
-            print("could not add user.")
+          user_entry = {
+              "name": name,
+              "cell_phone": cell_phone,
+              "region": input_region,
+              "village": input_village
+          }
+          if (check_user(user_entry)):
+            add_user(user_entry)
+
+        # # only add if passed checking
+        # if check_user(user_entry):
+        #     # add region number to phone number
+        #     if user_entry["region"] == "United States":
+        #         if not user_entry["cell_phone"].startswith("1"):
+        #             user_entry["cell_phone"] = "1" + str(user_entry["cell_phone"])
+        #     elif user_entry["region"] == "Ethiopia":
+        #         if not user_entry["cell_phone"].startswith("251"):
+        #             user_entry["cell_phone"] = "251" + str(user_entry["cell_phone"])
+        #     else:
+        #         print("Not supported")
+
+        #     # add user to db
+        #     add_user(user_entry)
+        # else:
+        #     # did not fill all required fields
+        #     print("could not add user.")
 
     # Get all of the current users, updated from the database
     user_list = get_all_users()
@@ -261,7 +276,7 @@ def voice():
     caller_info = request.args.get('caller')
     question = request.args.get('question')
     response = twiml.Response()
-    language="en"
+    language="es"
 
     action = "/gather?caller={}&question={}".format(caller_info, question)
     question_info = get_questions()
@@ -280,7 +295,7 @@ def gather():
     caller_info = request.args.get('caller')
     question = request.args.get('question')
     digits = request.form['Digits'] #These are the inputted numbers
-    language="en"
+    language="es"
     response = twiml.Response()
 
     add_call_to_db(caller_info, None, question_info.get(question), digits, True)
@@ -319,15 +334,16 @@ def add_msg():
     q_info['1'] = request.form.get('q2')
     q_info['2'] = request.form.get('q3')
     q_info['3'] = request.form.get('q4')
+
     write_questions(q_info)
 
-    global question_info
-    question_info = get_questions()
-    # if file and allowed_file(file.filename):
-    #   filename = secure_filename(file.filename)
-    #   file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    #   return redirect(url_for('uploaded_file',
-    #                           filename=filename))
+  global question_info
+  question_info = get_questions()
+  # if file and allowed_file(file.filename):
+  #   filename = secure_filename(file.filename)
+  #   file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+  #   return redirect(url_for('uploaded_file',
+  #                           filename=filename))
   return render_template("record.html", question_info=question_info)
 
 @app.route('/large.csv')

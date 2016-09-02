@@ -107,3 +107,43 @@ def db_get_call_logs():
           r['question'] = r['question'].decode("utf-8")
 
   return result
+
+
+
+#
+# Update Questions
+#
+def update_question(question, qid, language):
+    with connect(DATABASE_URL) as conn:
+        with dict_cursor(conn) as db:
+
+            q = ''' UPDATE QUESTION SET content = %(question)s, language=%(language)s WHERE id={} '''.format(qid)
+            # Insert a row of data
+            db.execute(q, {"question": question,
+                           "language": language,
+                           "id": qid})
+
+
+
+#
+# Load Questions
+#
+def load_questions():
+    with connect(DATABASE_URL) as conn:
+        with dict_cursor(conn) as db:
+
+            q = '''SELECT id,content FROM question '''
+            # Insert a row of data
+            db.execute(q)
+
+            result = db.fetchall()
+
+            new_dict = {}
+
+            for r in result:
+              new_dict[str(r['id'])] = str(r['content'])
+
+            print new_dict
+
+            return new_dict
+
