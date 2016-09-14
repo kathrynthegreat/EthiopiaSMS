@@ -30,19 +30,39 @@
     <input type=submit value=Upload> -->
     <div class="form-group">
      <label>Initial Message</label>
-     <input class="form-control" name="q1" type="text" placeholder="This question pauses for 5 seconds and repeats once.">
+     <select name="q1">
+       {% for x in soundlist %}
+       <option name="q1" data="{{x}}"> {{x}} </option>
+       {% endfor %}
+     </select>
+     <!-- <input class="form-control" name="q1" type="text" placeholder="This question pauses for 5 seconds and repeats once."> -->
    </div>
    <div class="form-group">
      <label>Press 1</label>
-     <input class="form-control" name="q2" type="text" placeholder="Does NOT Hang Up Until Response is Gathered">
+     <select name="q2">
+       {% for x in soundlist %}
+       <option name="q2" data="{{x}}"> {{x}} </option>
+       {% endfor %}
+     </select>
+     <!-- <input class="form-control" name="q2" type="text" placeholder="Does NOT Hang Up Until Response is Gathered"> -->
    </div>
    <div class="form-group">
      <label>Press 2</label>
-     <input class="form-control" name="q3" type="text" placeholder="Hangs up after speaking">
+     <select name="q3">
+       {% for x in soundlist %}
+       <option name="q3" data="{{x}}"> {{x}} </option>
+       {% endfor %}
+     </select>
+     <!-- <input class="form-control" name="q3" type="text" placeholder="Hangs up after speaking"> -->
    </div>
    <div class="form-group">
      <label>Press 3/End Call</label>
-     <input class="form-control" name="q4" type="text" placeholder="Hangs up after speaking">
+     <select name="q4">
+       {% for x in soundlist %}
+       <option name="q4" data="{{x}}"> {{x}} </option>
+       {% endfor %}
+     </select>
+     <!-- <input class="form-control" name="q4" type="text" placeholder="Hangs up after speaking"> -->
    </div>
    <button id="confirm" type="submit" class="btn btn-default col-md-offset-9">Confirm Action</button>
  </form>

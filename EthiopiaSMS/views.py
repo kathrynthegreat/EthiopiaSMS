@@ -12,6 +12,7 @@ import datetime
 import json
 import time
 import io
+import glob
 
 user_list = None
 call_list = None
@@ -20,6 +21,7 @@ ethiopia_info = {
     "villages": [],
     "message": ""
 }
+
 
 def write_questions(questions):
 
@@ -52,14 +54,15 @@ question_info = get_questions()
 app.config['BASIC_AUTH_USERNAME'] = AUTH_USERNAME
 app.config['BASIC_AUTH_PASSWORD'] = AUTH_PASSWORD
 
-print app.config
-
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/')
+UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/recordings')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 basic_auth = BasicAuth(app)
 
+def get_sounds():
+  print glob.glob(UPLOAD_FOLDER + "/*.mp3")
+  return glob.glob(UPLOAD_FOLDER + "/*.mp3")
 
 def allowed_file(filename):
     return '.' in filename
@@ -290,8 +293,9 @@ def voice():
         option = "Error"
         question = question_info.get('1', option)
         gather.pause(length=1)
+        gather.play(question, loop=3)
 
-        gather.say(question, language=language, loop=3)
+        # gather.say(question, language=language, loop=3)
 
     return str(response)
 
@@ -314,7 +318,8 @@ def gather():
           question = question_info.get('2', option)
 
           # add_call_to_db(caller_info, None, question, int(digits), True)
-          gather.say(question, language=language, loop=1)
+          gather.play(question, loop=3)
+          # gather.say(question, language=language, loop=1)
 
     elif digits == "2":
         action = "/gather?caller={}&question=2".format(caller_info)
@@ -322,14 +327,16 @@ def gather():
           option = "Error"
           question = question_info.get('3', option)
           # add_call_to_db(caller_info, None, question, int(digits), True)
-          response.say(question, language=language, loop=1)
+          response.play(question, loop=3)
+          # response.say(question, language=language, loop=1)
 
     else:
         option = "Error"
         question = question_info.get('4', option)
 
         add_call_to_db(caller_info, None, question, None, True)
-        response.say(option, language=language, loop=1)
+        response.play(question, loop=3)
+        # response.say(option, language=language, loop=1)
     return str(response)
 
 @app.route("/add_message", methods =["GET", "POST"])
@@ -342,17 +349,21 @@ def add_msg():
     q_info['2'] = request.form.get('q2')
     q_info['3'] = request.form.get('q3')
     q_info['4'] = request.form.get('q4')
+    print "we got something"
+    print q_info
 
     write_questions(q_info)
 
   global question_info
   question_info = get_questions()
+
+  soundlist = get_sounds()
   # if file and allowed_file(file.filename):
   #   filename = secure_filename(file.filename)
   #   file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
   #   return redirect(url_for('uploaded_file',
   #                           filename=filename))
-  return render_template("record.html", question_info=question_info)
+  return render_template("record.html", question_info=question_info, soundlist=soundlist)
 
 @app.route('/large.csv')
 def generate_large_csv():
