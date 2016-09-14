@@ -61,8 +61,14 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 basic_auth = BasicAuth(app)
 
 def get_sounds():
-  print glob.glob(UPLOAD_FOLDER + "/*.mp3")
-  return glob.glob(UPLOAD_FOLDER + "/*.mp3")
+  baseurl = (request.url).split("/")[0]
+  final_soundlist = []
+  full_filenames = glob.glob(UPLOAD_FOLDER + "/*.mp3")
+  for full_thing in full_filenames:
+    filename = full_thing.split("/")[-1]
+    final_soundlist.append(baseurl + "/static/recordings" + filename)
+
+  return final_soundlist
 
 def allowed_file(filename):
     return '.' in filename
@@ -358,6 +364,7 @@ def add_msg():
   question_info = get_questions()
 
   soundlist = get_sounds()
+  print soundlist
   # if file and allowed_file(file.filename):
   #   filename = secure_filename(file.filename)
   #   file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
