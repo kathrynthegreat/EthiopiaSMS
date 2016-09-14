@@ -61,7 +61,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 basic_auth = BasicAuth(app)
 
 def get_sounds():
-  baseurl = (request.url).split("/")[0]
+  baseurl = "http://ethiopia-sms.herokuapp.com"
   final_soundlist = []
   full_filenames = glob.glob(UPLOAD_FOLDER + "/*.mp3")
   for full_thing in full_filenames:
