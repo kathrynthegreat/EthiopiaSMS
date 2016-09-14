@@ -1,5 +1,6 @@
 from EthiopiaSMS import app
 from flask import render_template, request, redirect, url_for, Response, make_response
+from flask.ext.basicauth import BasicAuth
 from werkzeug import secure_filename
 from twilio.rest import TwilioRestClient
 from twilio import twiml
@@ -48,14 +49,16 @@ def get_questions():
 question_info = get_questions()
 
 
-# app.config['BASIC_AUTH_USERNAME'] = USERNAME
-# app.config['BASIC_AUTH_PASSWORD'] = PASSWORD
+app.config['BASIC_AUTH_USERNAME'] = AUTH_USERNAME
+app.config['BASIC_AUTH_PASSWORD'] = AUTH_PASSWORD
+
+print app.config
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# basic_auth = BasicAuth(app)
+basic_auth = BasicAuth(app)
 
 
 def allowed_file(filename):
@@ -102,8 +105,8 @@ def check_user(user_entry):
             return False
     return True
 
-
 @app.route("/users", methods=["GET", "POST"])
+@basic_auth.required
 def users():
     date = datetime.datetime.utcnow()
     date = date + datetime.timedelta(hours=3)
@@ -214,6 +217,7 @@ def foo():
 
 
 @app.route("/calls", methods=["GET", "POST"])
+@basic_auth.required
 def calls():
     call_list = db_get_call_logs()
     return render_template("calls.html", call_list=call_list)
@@ -329,6 +333,7 @@ def gather():
     return str(response)
 
 @app.route("/add_message", methods =["GET", "POST"])
+@basic_auth.required
 def add_msg():
 
   if request.method == "POST":

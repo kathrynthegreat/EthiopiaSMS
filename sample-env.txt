@@ -3,5 +3,6 @@ export FROM_NUMBER_DR="dominican.rep.number"
 export ACCOUNT_SID="fromtwilio"
 export AUTH_TOKEN="fromtwilio"
 export DATABASE_URL="postgresurl"
-export USERNAME="sampleusername"
-export PASSWORD="samplepw"
+export AUTH_USERNAME="sampleusername"
+export AUTH_PASSWORD="samplepw"
+
