@@ -345,6 +345,30 @@ def gather():
         # response.say(option, language=language, loop=1)
     return str(response)
 
+@app.route("/upload_sound", methods=["GET", "POST"])
+def upload_sound():
+  # maybe check for accepted audio stuff https://www.twilio.com/docs/api/rest/accepted-mime-types#accepted
+  if request.method == 'POST':
+        print "got here"
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            print "no file here"
+            return redirect(request.url)
+
+        file = request.files['file']
+        print file.filename
+        # if user does not select file, browser also
+        # submit a empty part without filename
+        if file.filename == '':
+            print "also dumb"
+            return redirect(request.url)
+        if file:
+            print "this is when it works"
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('add_msg'))
+  return redirect(url_for('add_msg'))
+
 @app.route("/add_message", methods =["GET", "POST"])
 @basic_auth.required
 def add_msg():
