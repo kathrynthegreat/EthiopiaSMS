@@ -314,13 +314,15 @@ def voice():
 def gather():
     caller_info = request.args.get('caller')
     question = request.args.get('question')
-    digits = request.form['Digits'] #These are the inputted numbers
+    if request.form['Digits']:
+      digits = request.form['Digits'] #These are the inputted numbers
     language="es"
     response = twiml.Response()
+
     print "Current questions: "
     print question_info
 
-    add_call_to_db(caller_info, None, question_info.get(question), digits, True)
+    add_call_to_db(caller_info, "initial", question_info.get(question), digits, True)
 
     if digits == "1":
         action = "/gather?caller={}&question=1".format(caller_info)
@@ -338,7 +340,7 @@ def gather():
           option = "Error"
           question = question_info.get('3', option)
           # add_call_to_db(caller_info, None, question, int(digits), True)
-          response.play(question, loop=3)
+          gather.play(question, loop=3)
           # response.say(question, language=language, loop=1)
 
     else:
