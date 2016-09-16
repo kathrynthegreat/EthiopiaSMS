@@ -296,7 +296,7 @@ def voice():
     response = twiml.Response()
     language="es"
 
-    action = "/gather?caller={}&question={}".format(caller_info, question)
+    action = "/gather?caller={}&question=1".format(caller_info, question)
     question_info = get_questions()
 
     with response.gather(numDigits=1, action=action) as gather:
@@ -304,7 +304,7 @@ def voice():
         option = "Error"
         question = question_info.get('1', option)
         gather.pause(length=1)
-        gather.play(question, loop=3)
+        gather.play(question, loop=2)
 
         # gather.say(question, language=language, loop=3)
 
@@ -322,25 +322,25 @@ def gather():
     print "Current questions: "
     print question_info
 
-    add_call_to_db(caller_info, "initial", question_info.get(question), digits, True)
+    add_call_to_db(caller_info, None, question_info.get(question), digits, True)
 
     if digits == "1":
-        action = "/gather?caller={}&question=1".format(caller_info)
+        action = "/gather?caller={}&question=2".format(caller_info)
         with response.gather(numDigits=1, action=action) as gather:
           option = "Error"
           question = question_info.get('2', option)
 
           # add_call_to_db(caller_info, None, question, int(digits), True)
-          gather.play(question, loop=3)
+          gather.play(question, loop=2)
           # gather.say(question, language=language, loop=1)
 
     elif digits == "2":
-        action = "/gather?caller={}&question=2".format(caller_info)
+        action = "/gather?caller={}&question=3".format(caller_info)
         with response.gather(numDigits=1, action=action) as gather:
           option = "Error"
           question = question_info.get('3', option)
           # add_call_to_db(caller_info, None, question, int(digits), True)
-          gather.play(question, loop=3)
+          gather.play(question, loop=2)
           # response.say(question, language=language, loop=1)
 
     else:
@@ -348,7 +348,7 @@ def gather():
         question = question_info.get('4', option)
 
         add_call_to_db(caller_info, None, question, None, True)
-        response.play(question, loop=3)
+        response.play(question, loop=1)
         # response.say(option, language=language, loop=1)
     return str(response)
 
