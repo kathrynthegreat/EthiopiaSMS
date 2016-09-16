@@ -340,7 +340,7 @@ def gather():
           option = "Error"
           question = question_info.get('3', option)
           # add_call_to_db(caller_info, None, question, int(digits), True)
-          gather.play(question, loop=2)
+          response.play(question, loop=1)
           # response.say(question, language=language, loop=1)
 
     else:
