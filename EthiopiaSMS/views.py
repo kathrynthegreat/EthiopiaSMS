@@ -221,7 +221,7 @@ def send_to_list(database_users):
     # TWO Important functions: Adds call to db & sends call
     for user_entry in database_users:
         call_id = send_call(user_entry['cell_phone'], user_entry['id'])
-        add_call_to_db(user_entry['id'], call_id, None, None, False)
+        add_call_to_db(user_entry['id'], call_id, "CallCreated", "CallCreated", False)
 
 
 @app.route("/get_csv", methods=["POST"])
@@ -347,7 +347,7 @@ def gather():
         option = "Error"
         question = question_info.get('4', option)
 
-        add_call_to_db(caller_info, None, question, None, True)
+        add_call_to_db(caller_info, None, question, "CallEnd", True)
         response.play(question, loop=1)
         # response.say(option, language=language, loop=1)
     return str(response)
