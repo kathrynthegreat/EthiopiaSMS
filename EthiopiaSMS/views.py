@@ -65,7 +65,7 @@ def get_sounds():
   final_soundlist = []
   types = ('/*.mp3', '/*.m4a')
   full_filenames = []
-  full_filenames = glob.glob(UPLOAD_FOLDER + "/*.mp3")
+  # full_filenames = glob.glob(UPLOAD_FOLDER + "/*.mp3")
   for file in types:
     full_filenames.extend(glob.glob(UPLOAD_FOLDER + file))
 
