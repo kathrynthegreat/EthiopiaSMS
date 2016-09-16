@@ -221,7 +221,7 @@ def send_to_list(database_users):
     # TWO Important functions: Adds call to db & sends call
     for user_entry in database_users:
         call_id = send_call(user_entry['cell_phone'], user_entry['id'])
-        add_call_to_db(user_entry['id'], call_id, "CallCreated", "CallCreated", False)
+        add_call_to_db(user_entry['id'], call_id, "CallCreated", None, False)
 
 
 @app.route("/get_csv", methods=["POST"])
