@@ -299,7 +299,7 @@ def welcome():
   ### Advanced: https://www.twilio.com/blog/2014/06/building-better-phone-trees-with-twilio.html
   with response.gather(numDigits=1, action=url_for('menu', caller=caller_info, question=1), method="POST") as g:
     g.play(url=question, loop=2)
-    return twiml(response)
+    return str(response)
 
 
 @app.route('/ivr/menu', methods=['POST', 'GET'])
@@ -316,7 +316,7 @@ def menu():
   if option_actions.has_key(selected_option):
     response = twilio.twiml.Response()
     option_actions[selected_option](response, question_info, caller_info)
-    return twiml(response)
+    return str(response)
 
 @app.route('/ivr/hours_of_rain', methods=['POST', 'GET'])
 def hours_rained():
@@ -332,7 +332,7 @@ def hours_rained():
 
   response.play(question_info.get(3))
   response.hangup()
-  return response
+  return str(response)
 
 def _get_hours_rained(response, question_info, caller_info):
   add_call_to_db(caller_info, None, 'Did it rain?', 1, True)
@@ -345,7 +345,7 @@ def _get_not_rained(response, question_info, caller_info):
 
   response.play(question_info.get(4))
   response.hangup()
-  return response
+  return str(response)
 
 @app.route('/voice', methods=['POST', 'GET'])
 def voice():
