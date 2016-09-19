@@ -314,7 +314,7 @@ def menu():
   }
 
   if option_actions.has_key(selected_option):
-    response = twilio.twiml.Response()
+    response = twiml.Response()
     option_actions[selected_option](response, question_info, caller_info)
     return str(response)
 
@@ -327,7 +327,7 @@ def hours_rained():
 
   add_call_to_db(caller_info, None, 'How many hours did it rain?', selected_option, True)
 
-  response = twilio.twiml.Response()
+  response = twiml.Response()
   question_info = get_questions()
 
   response.play(question_info.get(3))
