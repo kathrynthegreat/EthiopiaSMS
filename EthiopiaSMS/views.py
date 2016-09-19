@@ -287,6 +287,66 @@ def synch():
                   }
                 }''' % (str(ts))
 
+@app.route('/ivr/welcome', methods=['POST', 'GET'])
+def welcome():
+  caller_info = request.args.get('caller')
+  question_info = get_questions()
+  question = question_info.get('1', option)
+
+  response = twiml.Response()
+
+  ### IVR Phone Tree: https://www.twilio.com/docs/tutorials/walkthrough/ivr-phone-tree/python/flask#7
+  ### Advanced: https://www.twilio.com/blog/2014/06/building-better-phone-trees-with-twilio.html
+  with response.gather(numDigits=1, action=url_for('menu', caller=caller_info, question=1), method="POST") as g:
+    g.play(url=question, loop=2)
+    return twiml(response)
+
+
+@app.route('/ivr/menu', methods=['POST', 'GET'])
+def menu():
+  caller_info = request.args.get('caller')
+  selected_option = request.form['Digits']
+  question_info = get_questions()
+
+  option_actions = {
+    "1": _get_hours_rained,
+    "2": _get_not_rained
+  }
+
+  if option_actions.has_key(selected_option):
+    response = twilio.twiml.Response()
+    option_actions[selected_option](response, question_info, caller_info)
+    return twiml(response)
+
+@app.route('/ivr/hours_of_rain', methods=['POST', 'GET'])
+def hours_rained():
+  selected_option = 0
+
+  if request.form['Digits']:
+    selected_option = request.form['Digits']
+
+  add_call_to_db(caller_info, None, 'How many hours did it rain?', selected_option, True)
+
+  response = twilio.twiml.Response()
+  question_info = get_questions()
+
+  response.play(question_info.get(3))
+  response.hangup()
+  return response
+
+def _get_hours_rained(response, question_info, caller_info):
+  add_call_to_db(caller_info, None, 'Did it rain?', 1, True)
+  with response.gather(numDigits=1, action=url_for('hours_rained'), method="POST",caller=caller_info, question=2) as g:
+    g.play(question_info.get(2), loop=2)
+  return response
+
+def _get_not_rained(response, question_info, caller_info):
+  add_call_to_db(caller_info, None, 'Did it Rain?', 0, True)
+
+  response.play(question_info.get(4))
+  response.hangup()
+  return response
+
 @app.route('/voice', methods=['POST', 'GET'])
 def voice():
     ### Docs: http://twilio-python.readthedocs.org/en/latest/api/twiml.html#primary-verbs
@@ -296,7 +356,7 @@ def voice():
     response = twiml.Response()
     language="es"
 
-    action = "/gather?caller={}&question=1".format(caller_info, question)
+    action = "/gather?caller={}&question=1".format(caller_info)
     question_info = get_questions()
 
     with response.gather(numDigits=1, action=action) as gather:
