@@ -325,6 +325,9 @@ def hours_rained():
   if request.form['Digits']:
     selected_option = request.form['Digits']
   caller_info = request.args.get('caller')
+
+  print caller_info
+  print selected_option
   add_call_to_db(caller_info, None, 'How many hours did it rain?', selected_option, True)
 
   response = twiml.Response()
