@@ -339,9 +339,11 @@ def hours_rained():
 
 def _get_hours_rained(response, question_info, caller_info):
   add_call_to_db(caller_info, None, 'Did it rain?', 1, True)
-  with response.gather(numDigits=1, action=url_for('hours_rained'), method="POST",caller=caller_info, question=2) as g:
+
+  print caller
+  with response.gather(numDigits=1, action=url_for('hours_rained', caller=caller_info, question=2), method="POST") as g:
     g.play(question_info.get('2'), loop=2)
-    return response
+    return str(response)
 
 def _get_not_rained(response, question_info, caller_info):
   add_call_to_db(caller_info, None, 'Did it Rain?', 0, True)
