@@ -317,6 +317,8 @@ def menu():
     response = twiml.Response()
     option_actions[selected_option](response, question_info, caller_info)
     return str(response)
+  else:
+    return url_for('welcome', caller=caller_info)
 
 @app.route('/ivr/hours_of_rain', methods=['POST', 'GET'])
 def hours_rained():
