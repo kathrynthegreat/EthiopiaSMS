@@ -291,7 +291,7 @@ def synch():
 def welcome():
   caller_info = request.args.get('caller')
   question_info = get_questions()
-  question = question_info.get('1', option)
+  question = question_info.get('1')
 
   response = twiml.Response()
 
