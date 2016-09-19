@@ -326,8 +326,6 @@ def hours_rained():
     selected_option = request.form['Digits']
   caller_info = request.args.get('caller')
 
-  print caller_info
-  print selected_option
   add_call_to_db(caller_info, None, 'How many hours did it rain?', selected_option, True)
 
   response = twiml.Response()
@@ -340,7 +338,6 @@ def hours_rained():
 def _get_hours_rained(response, question_info, caller_info):
   add_call_to_db(caller_info, None, 'Did it rain?', 1, True)
 
-  print caller
   with response.gather(numDigits=1, action=url_for('hours_rained', caller=caller_info, question=2), method="POST") as g:
     g.play(question_info.get('2'), loop=2)
     return str(response)
