@@ -330,20 +330,20 @@ def hours_rained():
   response = twiml.Response()
   question_info = get_questions()
 
-  response.play(question_info.get(3))
+  response.play(question_info.get('3'))
   response.hangup()
   return str(response)
 
 def _get_hours_rained(response, question_info, caller_info):
   add_call_to_db(caller_info, None, 'Did it rain?', 1, True)
   with response.gather(numDigits=1, action=url_for('hours_rained'), method="POST",caller=caller_info, question=2) as g:
-    g.play(question_info.get(2), loop=2)
+    g.play(question_info.get('2'), loop=2)
   return response
 
 def _get_not_rained(response, question_info, caller_info):
   add_call_to_db(caller_info, None, 'Did it Rain?', 0, True)
 
-  response.play(question_info.get(4))
+  response.play(question_info.get('4'))
   response.hangup()
   return str(response)
 
