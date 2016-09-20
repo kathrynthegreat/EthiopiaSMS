@@ -469,15 +469,15 @@ def add_msg():
 
 @app.route('/large.csv')
 def generate_large_csv():
-    csv = "'name','region','question','answer','timestamp','call_id'\n"
+    csv = "Name,Cell_Phone,Village,Question,Answer,Timestamp,Call_Id\n"
     call_list = db_get_call_logs()
     for call in call_list:
       if call['question']:
         q = str(call['question'].encode('utf-8')).replace(',', '')
 
-        csv += "{},{},{},{},{},{}\n".format(call['name'],call['region'],q,call['answer'],call['timestamp'],call['call_id'])
+        csv += "{},{},{},{},{},{},{}\n".format(call['name'],call["cell_phone"],call['village'],q,call['answer'],call['timestamp'],call['call_id'])
       else:
-        csv += "{},{},{},{},{},{}\n".format(call['name'],call['region'],call['question'],call['answer'],call['timestamp'],call['call_id'])
+        csv += "{},{},{},{},{},{},{}\n".format(call['name'],call["cell_phone"],call['village'],call['question'],call['answer'],call['timestamp'],call['call_id'])
 
 
     response = make_response(csv)
