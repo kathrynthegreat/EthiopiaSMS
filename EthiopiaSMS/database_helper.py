@@ -98,7 +98,7 @@ def add_call_to_db(user_id, call_id, question, answer, response):
 def db_get_call_logs():
   with connect(DATABASE_URL) as conn:
     with dict_cursor(conn) as db:
-      select_string = "SELECT u.name,u.region,c.question,c.answer,c.timestamp,c.call_id FROM CALLS c, USERS u WHERE c.user_id=u.id"
+      select_string = "SELECT u.name,u.cell_phone,u.village,u.region,c.question,c.answer,c.timestamp,c.call_id FROM CALLS c, USERS u WHERE c.user_id=u.id"
       db.execute(select_string)
       result = db.fetchall()
 

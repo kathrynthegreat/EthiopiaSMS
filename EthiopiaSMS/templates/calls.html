@@ -29,7 +29,8 @@
 
       <tr>
         <th> Name </th>
-        <th> Region </th>
+        <th> Phone </th>
+        <th> Village </th>
         <th> Question </th>
         <th> Answer </th>
         <th> Timestamp (UTC)</th>
@@ -37,8 +38,9 @@
       </tr>
       {% for call in call_list|sort(attribute='timestamp', reverse=True) %}
       <tr class="highlightee" id="{{ call.sid }}">
-        <td>{{ call['name'] }} </td>
-        <td>{{ call['region']  }}</td>
+        <td>{{ call['name'] }}</td>
+        <td> {{ call['cell_phone'] }} </td>
+        <td>{{ call['village']  }}</td>
         <td>{{ call['question']  }}</td>
         <td>{{ call['answer']  }}</td>
         <td> {{ call['timestamp'].strftime('%H:%M:%S, %m-%d-%Y')  }} </td>
